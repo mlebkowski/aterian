@@ -25,11 +25,7 @@ final class InventoryService
         private readonly HttpClient $httpClient,
         bool $production
     ) {
-        if ($production) {
-            $this->logger = Logger::instance();
-        } else {
-            $this->logger = new DevLogger();
-        }
+        $this->logger = $production ? Logger::instance() : new DevLogger();
     }
 
     public function updateInventory(Product $product): void

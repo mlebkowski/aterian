@@ -26,3 +26,10 @@ that is ok for now, we’ll handle that in the next step.
 Monolog and Guzzle are some fine implementations of the PSR standards, we will
 use them. I could not find the Allegro SDK on packagist, so I will stub that
 along with the Aterian dependencies.
+
+## Quickly check what phpstan thinks
+
+It complains about the logger assignment in the constructor, saying that the
+readonly property is already assigned. It’s not, but let’s please it. Explicitly
+using `else` is nothing that I commonly do either way, let’s replace it with
+a simple ternary.
