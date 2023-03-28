@@ -15,3 +15,8 @@ this way composer will be our task runner.
 Next: autoloading.
 
 Since there are a lot of namespaces, let’s use an empty PSR-4 prefix for "src".
+
+## Next we’re adding the existing sources
+
+Just drop them in the src directory. It lights up like a christmas tree, but
+that is ok for now, we’ll handle that in the next step.
