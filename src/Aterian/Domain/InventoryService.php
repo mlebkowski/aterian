@@ -8,6 +8,7 @@ use Allegro\AllegroSellerSdk;
 use Allegro\AllegroSellerSdk\AllegroInventory;
 use Allegro\AllegroOauthSdk;
 use Aterian\Domain\Allegro\AllegroSellerAccounts;
+use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientInterface as HttpClient;
 use Psr\Log\LoggerInterface;
 use Aterian\Infrastructure\Logger;
@@ -50,13 +51,15 @@ final class InventoryService
             try {
                 $request = [
                     'headers' => ['Authorization' => 'Bearer ' . getenv('ATR_SHOP_API_SECRET')],
-                    'body' => ['quantity' => $inventory->quantity()]
+                    'body' => http_build_query(['quantity' => $inventory->quantity()]),
                 ];
                 $this->logger->debug('Request', $request);
-                $this->httpClient->request(
-                    'GET',
-                    'http://api.the-best-shop-ever.com/inventory/' . $product->id(),
-                    $request
+                $this->httpClient->sendRequest(
+                    new Request(
+                        'GET',
+                        'http://api.the-best-shop-ever.com/inventory/' . $product->id(),
+                        ...$request,
+                    ),
                 );
             } catch (\Throwable $e) {
                 $this->logger->error('Error occurred when updating an inventory');

@@ -89,3 +89,12 @@ Shit.
 
 Fortunately it was just me not knowing PHP. After fixing the spy, the test
 actually passes. 
+
+## More test cases
+
+Let’s handle other code paths and some edge cases. For this we will need another
+spy for the website sdk-thing. Same stuff, different names. While we’re at it, 
+let’s fix the bug in the Http Client interface (`request` vs `sendRequest`).
+
+This introduces a dependency on Guzzle into our SUT, but just for a little 
+while, this will be fixed soon.

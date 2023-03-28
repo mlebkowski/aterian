@@ -6,7 +6,7 @@ use Allegro\AllegroOauthSdk;
 use Allegro\AllegroSellerSdkSpy;
 use Aterian\Domain\Allegro\AllegroSellerAccounts;
 use Aterian\Domain\Allegro\AllegroSellerMother;
-use GuzzleHttp\Client;
+use Aterian\Infrastructure\HttpClientSpy;
 use PHPUnit\Framework\TestCase;
 
 class InventoryServiceTest extends TestCase
@@ -15,6 +15,7 @@ class InventoryServiceTest extends TestCase
     private StubInventory $inventory;
     private AllegroSellerAccounts $allegroSellers;
     private AllegroSellerSdkSpy $allegroSellerSdk;
+    private HttpClientSpy $httpClient;
 
     public function test product is published in allegro(): void
     {
@@ -25,15 +26,30 @@ class InventoryServiceTest extends TestCase
         $this->then allegro seller sdk is expected to be called with quantity(1);
     }
 
+    public function test product is published on the website(): void
+    {
+        $this->given the product is sold on the website();
+        $this->and the inventory contains quantity(1);
+        $this->when the inventory is updated();
+        $this->then a website request is made with quantity(1);
+    }
+
     protected function setUp(): void
     {
+        $this->allegroSellers = new AllegroSellerAccounts();
         $this->allegroSellerSdk = new AllegroSellerSdkSpy();
+        $this->httpClient = new HttpClientSpy();
     }
 
 
     private function given the product is sold on allegro(): void
     {
         $this->product = ProductMother::withSalesChannel(SalesChannel::Allegro);
+    }
+
+    private function given the product is sold on the website(): void
+    {
+        $this->product = ProductMother::withSalesChannel(SalesChannel::Website);
     }
 
     private function and the inventory contains quantity(int $quantity): void
@@ -48,13 +64,12 @@ class InventoryServiceTest extends TestCase
 
     private function when the inventory is updated(): void
     {
-        // todo:
         $sut = new InventoryService(
             inventory: $this->inventory,
             allegroSellerAccounts: $this->allegroSellers,
             allegroSellerSdk: $this->allegroSellerSdk,
             allegroOauth: $this->createMock(AllegroOauthSdk::class),
-            httpClient: new Client(),
+            httpClient: $this->httpClient,
             production: false,
         );
 
@@ -71,6 +86,27 @@ class InventoryServiceTest extends TestCase
                 'quantity' => $expected,
             ],
             $this->allegroSellerSdk->calls[0],
+        );
+    }
+
+    private function then a website request is made with quantity(int $quantity): void
+    {
+        self::assertCount(1, $this->httpClient->requests);
+        [$request] = $this->httpClient->requests;
+
+        self::assertSame(
+            'http://api.the-best-shop-ever.com/inventory/' . $this->product->id(),
+            (string)$request->getUri(),
+        );
+
+        self::assertSame(
+            sprintf('quantity=%d', $quantity),
+            (string)$request->getBody(),
+        );
+
+        self::assertSame(
+            'Bearer',
+            $request->getHeaderLine('Authorization')
         );
     }
 }
