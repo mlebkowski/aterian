@@ -6,13 +6,19 @@ namespace Aterian\Domain;
 
 final class Product
 {
-    public function __construct(private readonly string $id)
+    private readonly string $id;
+    private readonly array $channels;
+
+    public function __construct(SalesChannel ...$channels)
     {
+        // todo:
+        $this->id = (string)rand(1, 1000);
+        $this->channels = $channels;
     }
 
     public function isSoldOn(SalesChannel $channel): bool
     {
-        return false;
+        return in_array($channel, $this->channels, true);
     }
 
     public function id(): string
