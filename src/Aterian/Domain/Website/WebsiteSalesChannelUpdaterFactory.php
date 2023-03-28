@@ -11,11 +11,11 @@ use Psr\Http\Client\ClientInterface;
 
 final class WebsiteSalesChannelUpdaterFactory
 {
-    public static function make(ClientInterface $httpClient, bool $production): SalesChannelUpdater
+    public static function make(ClientInterface $httpClient): SalesChannelUpdater
     {
         return new GuardingSalesChannelUpdater(
             SalesChannel::Website,
-            new WebsiteSalesChannelUpdater($httpClient, $production),
+            new WebsiteSalesChannelUpdater($httpClient),
         );
     }
 }

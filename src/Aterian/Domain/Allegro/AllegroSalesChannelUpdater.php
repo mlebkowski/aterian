@@ -10,7 +10,9 @@ use Allegro\AllegroSellerSdk\AllegroInventory;
 use Aterian\Domain\Product;
 use Aterian\Domain\SalesChannel;
 use Aterian\Domain\SalesChannelUpdater;
+use Aterian\Domain\SalesChannelUpdaterException;
 use Aterian\Domain\StockKeepingUnit;
+use Throwable;
 
 final class AllegroSalesChannelUpdater implements SalesChannelUpdater
 {
@@ -33,13 +35,17 @@ final class AllegroSalesChannelUpdater implements SalesChannelUpdater
                 $sellerAccount->id(),
                 $sellerAccount->refreshToken(),
             );
-            $this->allegroSellerSdk->setInventory(
-                $accessToken,
-                new AllegroInventory(
-                    $product->id(),
-                    $sku->quantity(),
-                )
-            );
+            try {
+                $this->allegroSellerSdk->setInventory(
+                    $accessToken,
+                    new AllegroInventory(
+                        $product->id(),
+                        $sku->quantity(),
+                    )
+                );
+            } catch (Throwable $e) {
+                throw SalesChannelUpdaterException::fromOther($e);
+            }
         }
     }
 }

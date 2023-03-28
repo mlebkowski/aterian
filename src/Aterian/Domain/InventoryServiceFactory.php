@@ -24,6 +24,7 @@ final class InventoryServiceFactory
     {
         return new InventoryService(
             $inventory,
+            $production,
             new AllegroSalesChannelUpdater(
                 allegroSellerAccounts: $allegroSellers,
                 allegroSellerSdk: $allegroSellerSdk,
@@ -31,7 +32,6 @@ final class InventoryServiceFactory
             ),
             WebsiteSalesChannelUpdaterFactory::make(
                 httpClient: $httpClient,
-                production: $production,
             ),
         );
     }

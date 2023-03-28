@@ -144,3 +144,17 @@ system as a whole.
 
 The naming might require a change to reflect the *specific* use case this
 factory implements, but let’s KISS for now.
+
+## Error handling
+
+Before we move on, let’s change the behaviour a bit and add some error handling.
+The updaters will be independent, and failure of one won’t affect another. 
+A separate test will assert that. Since it is a new feature, we can go full
+TDD on it: first the test case, red, implement, green.
+
+The exception class could use some love, but that’s for a later date. To avoid 
+discarding exceptions, let’s move the logger here, and remove the logging from
+the WebsiteUpdater for now (it will reemmerge later). I’m sure of it, because 
+I left a todo comment. :)
+
+Ok, we’re green, let’s commit and move on to other adventures.

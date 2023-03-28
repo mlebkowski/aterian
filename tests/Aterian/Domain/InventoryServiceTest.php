@@ -36,22 +36,37 @@ class InventoryServiceTest extends TestCase
         $this->and there are no allegro seller sdk calls();
     }
 
+    public function test the website is updated even if allegro fails(): void
+    {
+        $this->given the product is sold in both channels();
+        $this->and the inventory contains quantity(1);
+        $this->and there is an allegro seller();
+        $this->but the allegro sdk will fail();
+        $this->when the inventory is updated();
+        $this->then a website request is made with quantity(1);
+    }
+
     protected function setUp(): void
     {
         $this->allegroSellers = new AllegroSellerAccounts();
-        $this->allegroSellerSdk = new AllegroSellerSdkSpy();
+        $this->allegroSellerSdk = AllegroSellerSdkSpy::some();
         $this->httpClient = new HttpClientSpy();
     }
 
 
     private function given the product is sold on allegro(): void
     {
-        $this->product = ProductMother::withSalesChannel(SalesChannel::Allegro);
+        $this->product = ProductMother::withAllegro();
     }
 
     private function given the product is sold on the website(): void
     {
-        $this->product = ProductMother::withSalesChannel(SalesChannel::Website);
+        $this->product = ProductMother::withWebsite();
+    }
+
+    private function given the product is sold in both channels(): void
+    {
+        $this->product = ProductMother::withBothSalesChannels();
     }
 
     private function and the inventory contains quantity(int $quantity): void
@@ -62,6 +77,11 @@ class InventoryServiceTest extends TestCase
     private function and there is an allegro seller(): void
     {
         $this->allegroSellers = new AllegroSellerAccounts(AllegroSellerMother::some());
+    }
+
+    private function but the allegro sdk will fail(): void
+    {
+        $this->allegroSellerSdk = AllegroSellerSdkSpy::throwing();
     }
 
     private function when the inventory is updated(): void

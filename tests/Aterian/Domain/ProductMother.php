@@ -6,8 +6,18 @@ namespace Aterian\Domain;
 
 final class ProductMother
 {
-    public static function withSalesChannel(SalesChannel $channel): Product
+    public static function withBothSalesChannels(): Product
     {
-        return new Product($channel);
+        return new Product(SalesChannel::Website, SalesChannel::Allegro);
+    }
+
+    public static function withWebsite(): Product
+    {
+        return new Product(SalesChannel::Website);
+    }
+
+    public static function withAllegro(): Product
+    {
+        return new Product(SalesChannel::Allegro);
     }
 }

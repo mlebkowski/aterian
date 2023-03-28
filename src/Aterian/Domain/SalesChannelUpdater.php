@@ -6,5 +6,8 @@ namespace Aterian\Domain;
 
 interface SalesChannelUpdater
 {
+    /**
+     * @throws SalesChannelUpdaterException
+     */
     public function update(Product $product, StockKeepingUnit $sku): void;
 }
