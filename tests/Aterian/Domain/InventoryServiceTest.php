@@ -4,10 +4,10 @@ namespace Aterian\Domain;
 
 use Allegro\AllegroOauthSdk;
 use Allegro\AllegroSellerSdkSpy;
+use Aterian\Application\WebsiteSalesChannelUpdaterFactory;
 use Aterian\Domain\Allegro\AllegroSalesChannelUpdater;
 use Aterian\Domain\Allegro\AllegroSellerAccounts;
 use Aterian\Domain\Allegro\AllegroSellerMother;
-use Aterian\Domain\Website\WebsiteSalesChannelUpdater;
 use Aterian\Infrastructure\HttpClientSpy;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +26,7 @@ class InventoryServiceTest extends TestCase
         $this->and there is an allegro seller();
         $this->when the inventory is updated();
         $this->then allegro seller sdk is expected to be called with quantity(1);
+        $this->and there are no website requests();
     }
 
     public function test product is published on the website(): void
@@ -34,6 +35,7 @@ class InventoryServiceTest extends TestCase
         $this->and the inventory contains quantity(1);
         $this->when the inventory is updated();
         $this->then a website request is made with quantity(1);
+        $this->and there are no allegro seller sdk calls();
     }
 
     protected function setUp(): void
@@ -67,13 +69,13 @@ class InventoryServiceTest extends TestCase
     private function when the inventory is updated(): void
     {
         $sut = new InventoryService(
-            inventory: $this->inventory,
-            allegro: new AllegroSalesChannelUpdater(
+            $this->inventory,
+            new AllegroSalesChannelUpdater(
                 allegroSellerAccounts: $this->allegroSellers,
                 allegroSellerSdk: $this->allegroSellerSdk,
                 allegroOauth: $this->createMock(AllegroOauthSdk::class),
             ),
-            website: new WebsiteSalesChannelUpdater(
+            WebsiteSalesChannelUpdaterFactory::make(
                 httpClient: $this->httpClient,
                 production: false,
             ),
@@ -114,5 +116,15 @@ class InventoryServiceTest extends TestCase
             'Bearer',
             $request->getHeaderLine('Authorization')
         );
+    }
+
+    private function and there are no website requests(): void
+    {
+        self::assertCount(0, $this->httpClient->requests);
+    }
+
+    private function and there are no allegro seller sdk calls(): void
+    {
+        self::assertCount(0, $this->allegroSellerSdk->calls);
     }
 }

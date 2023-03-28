@@ -110,3 +110,23 @@ We are doing this in steps. We will plainly move the logic to separate classes.
 Look how the creation of SUT changes — the existing deps are now passed to
 additional updaters, not much changes.
 
+## Moving the guards
+
+Each of the sales channel implementation will have a guard at the top.
+We’ll exit early if the channel is not supported for a given product. We could
+be tempted to extract this guard and use a decorator pattern, and have a factory
+to put it all together… I will implement that just as a showcase, but it has its
+downsides, and I think the final code would lack readability. If I made such 
+decision IRL, I would leave a similar comment in review.
+
+Let’s add some negative constraints, because we are not really testing whether 
+website is updated for allegro products and vice versa. That’s great: test fails
+before I decorate the website updater with a guard.
+
+We’ve combined the updater logic with the guard decorator using a factory. It’s
+placed in the `Application` layer, but we have a strong argument to claim that 
+this is domain logic, but let’s not dive into that right now.
+
+And finally, since the strong type on `WebsiteUpdater` is no longer valid 
+(it’s wrapped with in a guard), let’s go all the way in and remove the allegro
+updater requirement and expect a generic list of updaters.

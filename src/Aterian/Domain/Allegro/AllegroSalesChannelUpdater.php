@@ -8,6 +8,7 @@ use Allegro\AllegroOauthSdk;
 use Allegro\AllegroSellerSdk;
 use Allegro\AllegroSellerSdk\AllegroInventory;
 use Aterian\Domain\Product;
+use Aterian\Domain\SalesChannel;
 use Aterian\Domain\SalesChannelUpdater;
 use Aterian\Domain\StockKeepingUnit;
 
@@ -23,6 +24,10 @@ final class AllegroSalesChannelUpdater implements SalesChannelUpdater
     // todo: unit tests
     public function update(Product $product, StockKeepingUnit $sku): void
     {
+        if (false === $product->isSoldOn(SalesChannel::Allegro)) {
+            return;
+        }
+
         foreach ($this->allegroSellerAccounts as $sellerAccount) {
             $accessToken = $this->allegroOauth->getAccessToken(
                 $sellerAccount->id(),
