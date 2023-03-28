@@ -20,3 +20,9 @@ Since there are a lot of namespaces, let’s use an empty PSR-4 prefix for "src"
 
 Just drop them in the src directory. It lights up like a christmas tree, but
 that is ok for now, we’ll handle that in the next step.
+
+## Provide some deps for `InventoryService`
+
+Monolog and Guzzle are some fine implementations of the PSR standards, we will
+use them. I could not find the Allegro SDK on packagist, so I will stub that
+along with the Aterian dependencies.
