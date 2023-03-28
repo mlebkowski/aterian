@@ -66,7 +66,7 @@ class InventoryServiceTest extends TestCase
         self::assertCount(1, $this->allegroSellerSdk->calls);
         self::assertSame(
             [
-                'accessKey' => '',
+                'accessToken' => '',
                 'id' => $this->product->id(),
                 'quantity' => $expected,
             ],

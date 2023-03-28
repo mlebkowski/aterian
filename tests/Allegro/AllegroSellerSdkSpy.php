@@ -6,11 +6,12 @@ namespace Allegro;
 
 final class AllegroSellerSdkSpy implements AllegroSellerSdk
 {
+    /** @var array<array<mixed>> */
     public array $calls = [];
 
     public function setInventory(string $accessToken, AllegroSellerSdk\AllegroInventory $inventory): void
     {
-        $this->calls = [
+        $this->calls[] = [
             'accessToken' => $accessToken,
             'id' => $inventory->id,
             'quantity' => $inventory->quantity,

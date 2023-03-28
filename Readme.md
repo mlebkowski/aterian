@@ -84,3 +84,8 @@ F.
 ```
 
 Shit. 
+
+## Debugging
+
+Fortunately it was just me not knowing PHP. After fixing the spy, the test
+actually passes. 
