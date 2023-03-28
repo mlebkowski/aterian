@@ -3,7 +3,7 @@
 namespace Aterian\Domain;
 
 use Allegro\AllegroOauthSdk;
-use Allegro\AllegroSellerSdk;
+use Allegro\AllegroSellerSdkSpy;
 use Aterian\Domain\Allegro\AllegroSellerAccounts;
 use Aterian\Domain\Allegro\AllegroSellerMother;
 use GuzzleHttp\Client;
@@ -14,6 +14,7 @@ class InventoryServiceTest extends TestCase
     private Product $product;
     private StubInventory $inventory;
     private AllegroSellerAccounts $allegroSellers;
+    private AllegroSellerSdkSpy $allegroSellerSdk;
 
     public function test product is published in allegro(): void
     {
@@ -23,6 +24,12 @@ class InventoryServiceTest extends TestCase
         $this->when the inventory is updated();
         $this->then allegro seller sdk is expected to be called with quantity(1);
     }
+
+    protected function setUp(): void
+    {
+        $this->allegroSellerSdk = new AllegroSellerSdkSpy();
+    }
+
 
     private function given the product is sold on allegro(): void
     {
@@ -45,7 +52,7 @@ class InventoryServiceTest extends TestCase
         $sut = new InventoryService(
             inventory: $this->inventory,
             allegroSellerAccounts: $this->allegroSellers,
-            allegroSellerSdk: $this->createMock(AllegroSellerSdk::class),
+            allegroSellerSdk: $this->allegroSellerSdk,
             allegroOauth: $this->createMock(AllegroOauthSdk::class),
             httpClient: new Client(),
             production: false,
@@ -56,6 +63,14 @@ class InventoryServiceTest extends TestCase
 
     private function then allegro seller sdk is expected to be called with quantity(int $expected): void
     {
-        // todo:
+        self::assertCount(1, $this->allegroSellerSdk->calls);
+        self::assertSame(
+            [
+                'accessKey' => '',
+                'id' => $this->product->id(),
+                'quantity' => $expected,
+            ],
+            $this->allegroSellerSdk->calls[0],
+        );
     }
 }

@@ -72,3 +72,15 @@ They are easy to fix, no worries.
 Except for one, but it’s in the class under refactoring, 
 so I’ll handle that later I guess.
 
+## Add some assertions
+
+Ok, I cheated a little. There were no assertions in the test, so let’s quickly
+fix that with a spy. The SUT’s responsibility is to send a message (have a side
+effect) to the AllegroSDK, so let’s verify that it does.
+
+```
+$ phpunit
+F.
+```
+
+Shit. 
