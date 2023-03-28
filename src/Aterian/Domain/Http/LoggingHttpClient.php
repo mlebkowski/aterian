@@ -8,7 +8,6 @@ use Aterian\Domain\Logger\Logger;
 
 final class LoggingHttpClient implements HttpClient
 {
-
     public function __construct(private readonly HttpClient $inner, private readonly Logger $logger)
     {
     }

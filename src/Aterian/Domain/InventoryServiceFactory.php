@@ -23,8 +23,7 @@ final class InventoryServiceFactory
         WebsiteToken $token,
         HttpClient $httpClient,
         Logger $logger,
-    ): InventoryService
-    {
+    ): InventoryService {
         return new InventoryService(
             $inventory,
             $logger,

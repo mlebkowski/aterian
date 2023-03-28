@@ -6,6 +6,7 @@ namespace Aterian\Infrastructure;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
+use Stringable;
 use Throwable;
 
 final class Logger implements LoggerInterface, \Aterian\Domain\Logger\Logger
@@ -17,7 +18,7 @@ final class Logger implements LoggerInterface, \Aterian\Domain\Logger\Logger
         return new self();
     }
 
-    public function log($level, \Stringable|string $message, array $context = []): void
+    public function log($level, Stringable|string $message, array $context = []): void
     {
         // noop
     }

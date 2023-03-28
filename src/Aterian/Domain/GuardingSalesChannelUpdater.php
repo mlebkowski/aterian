@@ -6,7 +6,6 @@ namespace Aterian\Domain;
 
 final class GuardingSalesChannelUpdater implements SalesChannelUpdater
 {
-
     public function __construct(
         private readonly SalesChannel $channel,
         private readonly SalesChannelUpdater $inner,

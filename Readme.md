@@ -196,3 +196,13 @@ The core domain has no concept of production or dev environments, it does what
 its told. So let’s tell it. The logic to detect production mode is once again
 moved to the Application layer, and once more we can probably rely on the
 framework to handle it.
+
+## Cherry on top: code style
+
+I used PHP CS Fixer before, but for PSR-12 compliance PHP Code Sniffer 
+works out of the box. 
+
+```
+composer run cbf
+composer run cs
+```

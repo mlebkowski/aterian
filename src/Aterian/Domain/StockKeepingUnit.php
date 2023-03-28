@@ -6,7 +6,6 @@ namespace Aterian\Domain;
 
 final class StockKeepingUnit
 {
-
     public function __construct(private readonly int $quantity)
     {
     }

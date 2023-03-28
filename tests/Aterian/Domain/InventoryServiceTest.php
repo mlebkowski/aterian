@@ -11,6 +11,7 @@ use Aterian\Domain\Website\WebsiteTokenMother;
 use Aterian\Infrastructure\HttpClientSpy;
 use PHPUnit\Framework\TestCase;
 
+// phpcs:disable PSR1.Methods.CamelCapsMethodName
 class InventoryServiceTest extends TestCase
 {
     private Product $product;
