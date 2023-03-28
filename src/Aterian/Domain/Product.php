@@ -7,6 +7,7 @@ namespace Aterian\Domain;
 final class Product
 {
     private readonly string $id;
+    /** @var SalesChannel[] */
     private readonly array $channels;
 
     public function __construct(SalesChannel ...$channels)

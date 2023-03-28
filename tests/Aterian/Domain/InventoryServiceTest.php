@@ -2,8 +2,11 @@
 
 namespace Aterian\Domain;
 
+use Allegro\AllegroOauthSdk;
+use Allegro\AllegroSellerSdk;
 use Aterian\Domain\Allegro\AllegroSellerAccounts;
 use Aterian\Domain\Allegro\AllegroSellerMother;
+use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 
 class InventoryServiceTest extends TestCase
@@ -39,6 +42,16 @@ class InventoryServiceTest extends TestCase
     private function when the inventory is updated(): void
     {
         // todo:
+        $sut = new InventoryService(
+            inventory: $this->inventory,
+            allegroSellerAccounts: $this->allegroSellers,
+            allegroSellerSdk: $this->createMock(AllegroSellerSdk::class),
+            allegroOauth: $this->createMock(AllegroOauthSdk::class),
+            httpClient: new Client(),
+            production: false,
+        );
+
+        $sut->updateInventory($this->product);
     }
 
     private function then allegro seller sdk is expected to be called with quantity(int $expected): void

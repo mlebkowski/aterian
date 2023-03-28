@@ -1,0 +1,25 @@
+parameters:
+    checkAlwaysTrueCheckTypeFunctionCall: true
+    polluteScopeWithLoopInitialAssignments: true
+    polluteScopeWithAlwaysIterableForeach: true
+    checkAlwaysTrueInstanceof: true
+    checkAlwaysTrueStrictComparison: true
+    checkExplicitMixedMissingReturn: true
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+    reportMaybesInMethodSignatures: true
+    reportMaybesInPropertyPhpDocTypes: true
+    reportStaticMethodSignatures: true
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkUninitializedProperties: true
+    checkDynamicProperties: true
+    checkImplicitMixed: true
+    checkBenevolentUnionTypes: true
+    reportAlwaysTrueInLastCondition: true
+    reportWrongPhpDocTypeInVarTag: true
+    level: 9
+    paths:
+        - src
+        - tests
+    ignoreErrors:
+     - '/Class [\w\\]+Test has an uninitialized property \$\w+/'

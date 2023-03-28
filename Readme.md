@@ -61,3 +61,14 @@ Meanwhile, the `AllegroSellerAccounts` stub will be converted from an interface
 a collection, so let’s slap an `IteratorAggregate` on it and be done with it.
 
 Running tests confirms that all is green. Thank you 🙇
+
+## Looking at some static analysis
+
+At this point `phpstan` thinks everything is fine-and-dandy. 
+But I know it isn’t. Let’s turn up the nitpickingness to 11.
+After adding some draconian rules it starts reporting 14 issues.
+They are easy to fix, no worries.
+
+Except for one, but it’s in the class under refactoring, 
+so I’ll handle that later I guess.
+

@@ -8,8 +8,12 @@ use ArrayIterator;
 use IteratorAggregate;
 use Traversable;
 
+/**
+ * @phpstan-implements IteratorAggregate<int|string,AllegroSeller>
+ */
 final class AllegroSellerAccounts implements IteratorAggregate
 {
+    /** @var AllegroSeller[] */
     private readonly array $sellers;
 
     public function __construct(AllegroSeller ...$seller)
