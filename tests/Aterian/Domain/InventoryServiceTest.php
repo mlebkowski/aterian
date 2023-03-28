@@ -6,12 +6,14 @@ use Allegro\AllegroOauthSdk;
 use Allegro\AllegroSellerSdkSpy;
 use Aterian\Domain\Allegro\AllegroSellerAccounts;
 use Aterian\Domain\Allegro\AllegroSellerMother;
+use Aterian\Domain\Website\WebsiteTokenMother;
 use Aterian\Infrastructure\HttpClientSpy;
 use PHPUnit\Framework\TestCase;
 
 class InventoryServiceTest extends TestCase
 {
     private Product $product;
+    private Website\WebsiteToken $token;
     private StubInventory $inventory;
     private AllegroSellerAccounts $allegroSellers;
     private AllegroSellerSdkSpy $allegroSellerSdk;
@@ -51,6 +53,7 @@ class InventoryServiceTest extends TestCase
         $this->allegroSellers = new AllegroSellerAccounts();
         $this->allegroSellerSdk = AllegroSellerSdkSpy::some();
         $this->httpClient = new HttpClientSpy();
+        $this->token = WebsiteTokenMother::some();
     }
 
 
@@ -91,6 +94,7 @@ class InventoryServiceTest extends TestCase
             allegroSellers: $this->allegroSellers,
             allegroSellerSdk: $this->allegroSellerSdk,
             allegroOauthSdk: $this->createMock(AllegroOauthSdk::class),
+            token: $this->token,
             httpClient: $this->httpClient,
             production: false,
         );
@@ -127,7 +131,7 @@ class InventoryServiceTest extends TestCase
         );
 
         self::assertSame(
-            'Bearer',
+            sprintf('Bearer %s', $this->token->value),
             $request->getHeaderLine('Authorization')
         );
     }

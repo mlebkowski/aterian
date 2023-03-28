@@ -4,19 +4,35 @@ declare(strict_types=1);
 
 namespace Aterian\Infrastructure;
 
-use GuzzleHttp\Psr7\Response;
-use Psr\Http\Client\ClientInterface;
+use Aterian\Domain\Http\HttpClient;
+use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
 
-final class HttpClientSpy implements ClientInterface
+final class HttpClientSpy implements HttpClient
 {
     /** @var RequestInterface[] */
     public array $requests = [];
 
-    public function sendRequest(RequestInterface $request): ResponseInterface
+    public function lastRequest(): RequestInterface
     {
-        $this->requests[] = $request;
-        return new Response();
+        $request = end($this->requests);
+        if (false === $request instanceof RequestInterface) {
+            throw new RuntimeException('No requests recorded');
+        }
+
+        return $request;
+    }
+
+    public function request(string $token, string $url, array $payload): void
+    {
+        // it’s test sources
+        // I didn’t want to introduce a new VO, so I’m using guzzle’s request
+        $this->requests[] = new Request(
+            'GET',
+            $url,
+            ['Authorization' => sprintf("Bearer %s", $token)],
+            http_build_query($payload),
+        );
     }
 }

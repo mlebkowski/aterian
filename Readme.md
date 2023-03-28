@@ -158,3 +158,34 @@ the WebsiteUpdater for now (it will reemmerge later). I’m sure of it, because
 I left a todo comment. :)
 
 Ok, we’re green, let’s commit and move on to other adventures.
+
+
+## Refactoring WebsiteUpdater
+
+There is a lot to unpack here, but basically this unit has multiple 
+responsibilities, spanning across multiple layers. How to reason about it…?
+We will treat it as a glorified http request builder. It would seem that we
+shouldn’t shove http requests into our core domain, but on the other hand, 
+having an abstraction over that would be over-engineering.
+
+Should logger be a part of the domain? Depending on how strict we are, but I
+could defend that argument for a long time if need be.
+
+Wrapping scalars in POPOs is good for type guarantees and for autowiring!
+
+To sum up:
+
+ * The `getenv` call is moved to app layer (probs framework will take care of
+   that either way), and inside the domain we expect the value to be injected
+ * The `HttpClient` was replaced — this way we keep the domain pure, and
+   implement the actual adapter in the infra layer. That also removes the 
+   dependency on Guzzle I talked about earlier
+ * The logging was pushed down to the `HttpClient` using the decorator pattern.
+   Not sure if that’s the requirement, but hey, there are no requirements, 
+   I’m just coding blind ;)
+ * On the context boundary, the exceptions are mapped, so implementation 
+   details don’t leak.
+
+Let’s save some time and skip testing if the requests are logged, but we will
+refactor it using the decorator pattern either way. And scrub the secrets
+while we’re at it, yikes!

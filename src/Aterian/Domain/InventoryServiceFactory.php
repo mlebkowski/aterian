@@ -8,8 +8,9 @@ use Allegro\AllegroOauthSdk;
 use Allegro\AllegroSellerSdk;
 use Aterian\Domain\Allegro\AllegroSalesChannelUpdater;
 use Aterian\Domain\Allegro\AllegroSellerAccounts;
+use Aterian\Domain\Http\HttpClient;
 use Aterian\Domain\Website\WebsiteSalesChannelUpdaterFactory;
-use Psr\Http\Client\ClientInterface;
+use Aterian\Domain\Website\WebsiteToken;
 
 final class InventoryServiceFactory
 {
@@ -18,7 +19,8 @@ final class InventoryServiceFactory
         AllegroSellerAccounts $allegroSellers,
         AllegroSellerSdk $allegroSellerSdk,
         AllegroOauthSdk $allegroOauthSdk,
-        ClientInterface $httpClient,
+        WebsiteToken $token,
+        HttpClient $httpClient,
         bool $production,
     ): InventoryService
     {
@@ -31,6 +33,7 @@ final class InventoryServiceFactory
                 allegroOauth: $allegroOauthSdk,
             ),
             WebsiteSalesChannelUpdaterFactory::make(
+                token: $token,
                 httpClient: $httpClient,
             ),
         );
