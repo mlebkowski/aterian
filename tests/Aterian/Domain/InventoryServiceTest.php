@@ -4,8 +4,10 @@ namespace Aterian\Domain;
 
 use Allegro\AllegroOauthSdk;
 use Allegro\AllegroSellerSdkSpy;
+use Aterian\Domain\Allegro\AllegroSalesChannelUpdater;
 use Aterian\Domain\Allegro\AllegroSellerAccounts;
 use Aterian\Domain\Allegro\AllegroSellerMother;
+use Aterian\Domain\Website\WebsiteSalesChannelUpdater;
 use Aterian\Infrastructure\HttpClientSpy;
 use PHPUnit\Framework\TestCase;
 
@@ -66,11 +68,15 @@ class InventoryServiceTest extends TestCase
     {
         $sut = new InventoryService(
             inventory: $this->inventory,
-            allegroSellerAccounts: $this->allegroSellers,
-            allegroSellerSdk: $this->allegroSellerSdk,
-            allegroOauth: $this->createMock(AllegroOauthSdk::class),
-            httpClient: $this->httpClient,
-            production: false,
+            allegro: new AllegroSalesChannelUpdater(
+                allegroSellerAccounts: $this->allegroSellers,
+                allegroSellerSdk: $this->allegroSellerSdk,
+                allegroOauth: $this->createMock(AllegroOauthSdk::class),
+            ),
+            website: new WebsiteSalesChannelUpdater(
+                httpClient: $this->httpClient,
+                production: false,
+            ),
         );
 
         $sut->updateInventory($this->product);

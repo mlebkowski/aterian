@@ -98,3 +98,15 @@ let’s fix the bug in the Http Client interface (`request` vs `sendRequest`).
 
 This introduces a dependency on Guzzle into our SUT, but just for a little 
 while, this will be fixed soon.
+
+## Starting the refactoring
+
+The first obvious choice would be abstracting the sales channel handlers. 
+So let’s do that. The e2e will not change that much, because we want to retain
+the observable behaviour — so we’re basically expecting the same side effects
+for the same context.
+
+We are doing this in steps. We will plainly move the logic to separate classes. 
+Look how the creation of SUT changes — the existing deps are now passed to
+additional updaters, not much changes.
+
