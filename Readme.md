@@ -130,3 +130,17 @@ this is domain logic, but let’s not dive into that right now.
 And finally, since the strong type on `WebsiteUpdater` is no longer valid 
 (it’s wrapped with in a guard), let’s go all the way in and remove the allegro
 updater requirement and expect a generic list of updaters.
+
+## Restore the logic of composing updaters
+
+At this point the sole responsibility of the SUT is to fetch SKU from the 
+inventory and iterate on updaters. The unit test for that could be much simpler,
+but let’s keep our e2e test for now.
+
+Hmm, but we’ve lost the logic of selecting the updaters and calling them in the 
+correct order. We need to restore that, let’s make a factory. This way the 
+service itself represents the unit of logic, but the factory reflects more the
+system as a whole.
+
+The naming might require a change to reflect the *specific* use case this
+factory implements, but let’s KISS for now.

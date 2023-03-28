@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Aterian\Application;
+namespace Aterian\Domain\Website;
 
 use Aterian\Domain\GuardingSalesChannelUpdater;
 use Aterian\Domain\SalesChannel;
 use Aterian\Domain\SalesChannelUpdater;
-use Aterian\Domain\Website\WebsiteSalesChannelUpdater;
 use Psr\Http\Client\ClientInterface;
 
 final class WebsiteSalesChannelUpdaterFactory

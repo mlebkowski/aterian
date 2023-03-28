@@ -4,8 +4,6 @@ namespace Aterian\Domain;
 
 use Allegro\AllegroOauthSdk;
 use Allegro\AllegroSellerSdkSpy;
-use Aterian\Application\WebsiteSalesChannelUpdaterFactory;
-use Aterian\Domain\Allegro\AllegroSalesChannelUpdater;
 use Aterian\Domain\Allegro\AllegroSellerAccounts;
 use Aterian\Domain\Allegro\AllegroSellerMother;
 use Aterian\Infrastructure\HttpClientSpy;
@@ -68,17 +66,13 @@ class InventoryServiceTest extends TestCase
 
     private function when the inventory is updated(): void
     {
-        $sut = new InventoryService(
-            $this->inventory,
-            new AllegroSalesChannelUpdater(
-                allegroSellerAccounts: $this->allegroSellers,
-                allegroSellerSdk: $this->allegroSellerSdk,
-                allegroOauth: $this->createMock(AllegroOauthSdk::class),
-            ),
-            WebsiteSalesChannelUpdaterFactory::make(
-                httpClient: $this->httpClient,
-                production: false,
-            ),
+        $sut = InventoryServiceFactory::make(
+            inventory: $this->inventory,
+            allegroSellers: $this->allegroSellers,
+            allegroSellerSdk: $this->allegroSellerSdk,
+            allegroOauthSdk: $this->createMock(AllegroOauthSdk::class),
+            httpClient: $this->httpClient,
+            production: false,
         );
 
         $sut->updateInventory($this->product);
