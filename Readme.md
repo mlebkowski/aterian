@@ -189,3 +189,10 @@ To sum up:
 Let’s save some time and skip testing if the requests are logged, but we will
 refactor it using the decorator pattern either way. And scrub the secrets
 while we’re at it, yikes!
+
+## Remove the `production` flag
+
+The core domain has no concept of production or dev environments, it does what
+its told. So let’s tell it. The logic to detect production mode is once again
+moved to the Application layer, and once more we can probably rely on the
+framework to handle it.

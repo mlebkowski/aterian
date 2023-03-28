@@ -8,7 +8,9 @@ use Throwable;
 
 final class LoggerSpy implements Logger
 {
+    /** @var string[] */
     public array $debug = [];
+    /** @var Throwable[] */
     public array $exceptions = [];
 
     public function logException(Throwable $e): void

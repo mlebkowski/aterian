@@ -6,6 +6,7 @@ use Allegro\AllegroOauthSdk;
 use Allegro\AllegroSellerSdkSpy;
 use Aterian\Domain\Allegro\AllegroSellerAccounts;
 use Aterian\Domain\Allegro\AllegroSellerMother;
+use Aterian\Domain\Logger\LoggerSpy;
 use Aterian\Domain\Website\WebsiteTokenMother;
 use Aterian\Infrastructure\HttpClientSpy;
 use PHPUnit\Framework\TestCase;
@@ -96,7 +97,7 @@ class InventoryServiceTest extends TestCase
             allegroOauthSdk: $this->createMock(AllegroOauthSdk::class),
             token: $this->token,
             httpClient: $this->httpClient,
-            production: false,
+            logger: new LoggerSpy(),
         );
 
         $sut->updateInventory($this->product);

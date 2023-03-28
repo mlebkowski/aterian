@@ -9,6 +9,7 @@ use Allegro\AllegroSellerSdk;
 use Aterian\Domain\Allegro\AllegroSalesChannelUpdater;
 use Aterian\Domain\Allegro\AllegroSellerAccounts;
 use Aterian\Domain\Http\HttpClient;
+use Aterian\Domain\Logger\Logger;
 use Aterian\Domain\Website\WebsiteSalesChannelUpdaterFactory;
 use Aterian\Domain\Website\WebsiteToken;
 
@@ -21,12 +22,12 @@ final class InventoryServiceFactory
         AllegroOauthSdk $allegroOauthSdk,
         WebsiteToken $token,
         HttpClient $httpClient,
-        bool $production,
+        Logger $logger,
     ): InventoryService
     {
         return new InventoryService(
             $inventory,
-            $production,
+            $logger,
             new AllegroSalesChannelUpdater(
                 allegroSellerAccounts: $allegroSellers,
                 allegroSellerSdk: $allegroSellerSdk,
